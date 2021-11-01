@@ -1,0 +1,20 @@
+name: 'YC CDN purge'
+description: 'GitHub Action to purge Yandex Cloud CDN cache.'
+author: 'Nikolay Matrosov'
+inputs:
+  yc-sa-json-credentials:
+    required: true
+    description: 'Json containing authorized key for Service Account. More info https://cloud.yandex.ru/docs/container-registry/operations/authentication#sa-json'
+  cdn-resource-id:
+    required: true
+    description: 'CDN resource ID'
+  cdn-paths:
+    required: false
+    description: 'Array of paths to purge. Multiline. If an empty array of paths is specified, the cache is purged entirely.'
+
+branding:
+  color: blue
+  icon: delete
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

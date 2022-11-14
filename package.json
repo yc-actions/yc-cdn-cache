@@ -1,6 +1,6 @@
 {
   "name": "yc-actions-yc-cdn-cache",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "GitHub Action to purge Yandex Cloud CDN cache.",
   "main": "lib/main.js",
   "scripts": {

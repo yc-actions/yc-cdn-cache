@@ -16,6 +16,9 @@
     "type": "git",
     "url": "git+https://github.com/yc-actions/yc-cdn-cache.git"
   },
+  "engines": {
+    "node": ">= 20"
+  },
   "keywords": [
     "actions",
     "yandex cloud",

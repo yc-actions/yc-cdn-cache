@@ -1,4 +1,4 @@
-import * as core from '@actions/core';
+import {info, getInput, getMultilineInput, error, setFailed} from '@actions/core';
 import {Session} from '@nikolay.matrosov/yc-ts-sdk';
 import {completion} from '@nikolay.matrosov/yc-ts-sdk/lib/src/operation';
 import {CacheService} from '@nikolay.matrosov/yc-ts-sdk/lib/api/cdn/v1';
@@ -7,19 +7,19 @@ import {fromServiceAccountJsonFile} from '@nikolay.matrosov/yc-ts-sdk/lib/src/To
 
 async function run(): Promise<void> {
   try {
-    core.info(`start`);
-    const ycSaJsonCredentials = core.getInput('yc-sa-json-credentials', {
+    info(`start`);
+    const ycSaJsonCredentials = getInput('yc-sa-json-credentials', {
       required: true,
     });
 
-    const resourceId = core.getInput('cdn-resource-id', {
+    const resourceId = getInput('cdn-resource-id', {
       required: true,
     });
-    const paths: string[] = core.getMultilineInput('cdn-paths') || [];
-    core.info(`paths: ${JSON.stringify(paths)}`);
+    const paths: string[] = getMultilineInput('cdn-paths') || [];
+    info(`paths: ${JSON.stringify(paths)}`);
 
     const serviceAccountJson = fromServiceAccountJsonFile(JSON.parse(ycSaJsonCredentials));
-    core.info('Parsed Service account JSON');
+    info('Parsed Service account JSON');
 
     const session = new Session({serviceAccountJson});
     const cacheService = CacheService(session);
@@ -32,11 +32,11 @@ async function run(): Promise<void> {
     );
     const res = await completion(op, session);
     const err = res.error != null;
-    core.info(`Operation ${res.id}  done:'${res.done}' has error:'${err}'`);
-  } catch (error) {
-    if (error instanceof Error) {
-      core.error(error);
-      core.setFailed(error.message);
+    info(`Operation ${res.id}  done:'${res.done}' has error:'${err}'`);
+  } catch (err) {
+    if (err instanceof Error) {
+      error(err);
+      setFailed(err.message);
     }
   }
 }

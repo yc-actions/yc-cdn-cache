@@ -1,9 +1,7 @@
-import {info, getInput, getMultilineInput, error, setFailed} from '@actions/core';
-import {Session} from '@nikolay.matrosov/yc-ts-sdk';
-import {completion} from '@nikolay.matrosov/yc-ts-sdk/lib/src/operation';
-import {CacheService} from '@nikolay.matrosov/yc-ts-sdk/lib/api/cdn/v1';
-import {PurgeCacheRequest} from '@nikolay.matrosov/yc-ts-sdk/lib/generated/yandex/cloud/cdn/v1/cache_service';
-import {fromServiceAccountJsonFile} from '@nikolay.matrosov/yc-ts-sdk/lib/src/TokenService/iamTokenService';
+import {error, getInput, getMultilineInput, info, setFailed} from '@actions/core';
+import {PurgeCacheRequest} from '@yandex-cloud/nodejs-sdk/dist/generated/yandex/cloud/cdn/v1/cache_service';
+import {fromServiceAccountJsonFile} from './service-account-json';
+import {errors, serviceClients, Session, waitForOperation} from '@yandex-cloud/nodejs-sdk';
 
 async function run(): Promise<void> {
   try {
@@ -22,7 +20,7 @@ async function run(): Promise<void> {
     info('Parsed Service account JSON');
 
     const session = new Session({serviceAccountJson});
-    const cacheService = CacheService(session);
+    const cacheService = session.client(serviceClients.CDNCacheServiceClient);
 
     const op = await cacheService.purge(
       PurgeCacheRequest.fromPartial({
@@ -30,11 +28,14 @@ async function run(): Promise<void> {
         paths,
       }),
     );
-    const res = await completion(op, session);
+    const res = await waitForOperation(op, session);
     const err = res.error != null;
     info(`Operation ${res.id}  done:'${res.done}' has error:'${err}'`);
   } catch (err) {
     if (err instanceof Error) {
+      if (err instanceof errors.ApiError) {
+        error(`${err.message}\nx-request-id: ${err.requestId}\nx-server-trace-id: ${err.serverTraceId}`);
+      }
       error(err);
       setFailed(err.message);
     }

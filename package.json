@@ -1,6 +1,6 @@
 {
   "name": "yc-actions-yc-cdn-cache",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "GitHub Action to purge Yandex Cloud CDN cache.",
   "main": "lib/main.js",
   "scripts": {
@@ -30,21 +30,21 @@
   "dependencies": {
     "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.1",
-    "@nikolay.matrosov/yc-ts-sdk": "^1.6.4"
+    "@yandex-cloud/nodejs-sdk": "^2.8.0"
   },
   "devDependencies": {
     "@types/mustache": "^4.2.6",
-    "@types/node": "^24.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.34.1",
-    "@typescript-eslint/parser": "^8.34.1",
+    "@types/node": "^24.0.4",
+    "@typescript-eslint/eslint-plugin": "^8.35.0",
+    "@typescript-eslint/parser": "^8.35.0",
     "@vercel/ncc": "^0.38.3",
-    "dotenv": "^16.5.0",
+    "dotenv": "^16.6.0",
     "eslint": "^9.29.0",
     "eslint-plugin-github": "^6.0.0",
     "eslint-plugin-jest": "^28.14.0",
-    "jest": "^30.0.2",
+    "jest": "^30.0.3",
     "js-yaml": "^4.1.0",
-    "prettier": "3.5.3",
+    "prettier": "3.6.2",
     "ts-jest": "^29.4.0",
     "typescript": "^5.8.3"
   }

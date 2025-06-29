@@ -1,7 +1,7 @@
 import {error, getInput, getMultilineInput, info, setFailed} from '@actions/core';
 import {PurgeCacheRequest} from '@yandex-cloud/nodejs-sdk/dist/generated/yandex/cloud/cdn/v1/cache_service';
 import {fromServiceAccountJsonFile} from './service-account-json';
-import {errors, serviceClients, Session, waitForOperation} from '@yandex-cloud/nodejs-sdk';
+import {errors, serviceClients, Session} from '@yandex-cloud/nodejs-sdk';
 
 async function run(): Promise<void> {
   try {
@@ -28,9 +28,8 @@ async function run(): Promise<void> {
         paths,
       }),
     );
-    const res = await waitForOperation(op, session);
-    const err = res.error != null;
-    info(`Operation ${res.id}  done:'${res.done}' has error:'${err}'`);
+    const err = op.error != null;
+    info(`Operation ${op.id}  done:'${op.done}' has error:'${err}'`);
   } catch (err) {
     if (err instanceof Error) {
       if (err instanceof errors.ApiError) {
